@@ -6,7 +6,11 @@ This point was the main motivation, when we developed this project.
 
 ### Requirements
  - JDK 1.7 or higher
- - Spring any version with RestTemplate (we were using the version 4.2.10 for our tests)
+ - Spring any version with RestTemplate (we were using the version **4.2.9.RELEASE** for our tests)
+ 
+### Usage
+
+TBD
  
 ### Feedback
 
