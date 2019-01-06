@@ -14,7 +14,7 @@ public interface LiqPayApi {
      * Liq and Buy
      * Payment acceptance on the site client to server
      * To accept payments on your site you will need:
-     * Register on www.devatlant.ua
+     * Register on www.liqpay.ua
      * Create a store in your account using install master
      * Get a ready HTML-button or create a simple HTML form
      * HTML form should be sent by POST to URL https://www.liqpay.ua/api/3/checkout Two parameters data and signature, where:
