@@ -1,5 +1,7 @@
 package com.devatlant;
 
+import com.devatlant.model.LiqPayContract;
+
 import java.util.Map;
 
 public interface LiqPayApi {
@@ -22,4 +24,11 @@ public interface LiqPayApi {
      * signature - function result base64_encode( sha1( $private_key . $data . $private_key ) )
      */
     String cnb_form(Map<String, String> params);
+
+    /**
+     * generate data and signature in specified LiqPay format
+     * @param params all payments params to be used
+     * @return data and signature
+     */
+    LiqPayContract generateApiContract(Map<String, String> params);
 }

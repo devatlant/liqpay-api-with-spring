@@ -1,5 +1,6 @@
 package com.devatlant;
 
+import com.devatlant.model.LiqPayContract;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +133,15 @@ public class LiqPay implements LiqPayApi {
         return renderHtmlForm(data, language, signature);
     }
 
-    private String renderHtmlForm(String data, String language, String signature) {
+  @Override
+  public LiqPayContract generateApiContract(Map<String, String> params) {
+    checkCnbParams(params);
+    final String data = base64_encode(JSONObject.toJSONString(withSandboxParam(withBasicApiParams(params))));
+    final String signature = createSignature(data);
+    return new LiqPayContract(data, signature);
+  }
+
+  private String renderHtmlForm(String data, String language, String signature) {
         String form = "";
         form += "<form method=\"post\" action=\"" + LIQPAY_API_CHECKOUT_URL + "\" accept-charset=\"utf-8\">\n";
         form += "<input type=\"hidden\" name=\"data\" value=\"" + data + "\" />\n";

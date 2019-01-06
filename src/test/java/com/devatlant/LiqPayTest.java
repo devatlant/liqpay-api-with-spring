@@ -1,5 +1,6 @@
 package com.devatlant;
 
+import com.devatlant.model.LiqPayContract;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -123,5 +124,19 @@ public class LiqPayTest {
         Map<String, String> generated = lp.generateData(Collections.unmodifiableMap(invoiceParams));
         assertEquals("DqcGjvo2aXgt0+zBZECdH4cbPWY=", generated.get("signature"));
         assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
+    }
+
+    @Test
+    public void shouldReturnValidContract(){
+        Map<String, String> invoiceParams = new TreeMap<>();
+        invoiceParams.put("email", "client-email@gmail.com");
+        invoiceParams.put("description", "Description");
+        invoiceParams.put("amount", "200");
+        invoiceParams.put("currency", "USD");
+        invoiceParams.put("order_id", "order_id_1");
+        LiqPayContract contract = lp.generateApiContract(invoiceParams);
+        assertNotNull(contract);
+        assertEquals("ogYKx/9/zWJXIxdSWQisBaxLH1w=", contract.signature);
+        assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImRlc2NyaXB0aW9uIjoiRGVzY3JpcHRpb24iLCJlbWFpbCI6ImNsaWVudC1lbWFpbEBnbWFpbC5jb20iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", contract.data);
     }
 }
