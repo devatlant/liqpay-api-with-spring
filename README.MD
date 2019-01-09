@@ -16,3 +16,6 @@ TBD
 
 Please, don't hesitate to contact us for any question or suggestions. Patch requests and comments are welcome.
 
+### Continous Integration
+
+travis-ci.org
