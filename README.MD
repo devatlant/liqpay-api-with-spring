@@ -22,7 +22,7 @@ Please, don't hesitate to contact us for any question or suggestions. Patch requ
 
 mvn clean package
 
-###Continuous Integration
+### Continuous Integration
 
 travis-ci.org
 [![Build Status](https://travis-ci.org/HennadiiMelnyk/liqpay-api-with-spring.png?branch=master)](https://travis-ci.org/HennadiiMelnyk/liqpay-api-with-spring)
