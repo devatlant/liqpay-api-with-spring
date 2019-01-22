@@ -124,4 +124,8 @@ public class LiqPayTest {
         assertEquals("DqcGjvo2aXgt0+zBZECdH4cbPWY=", generated.get("signature"));
         assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
     }
+    @Test
+    public void testApi(){
+
+    }
 }
