@@ -19,6 +19,7 @@ public class LiqPayRequest {
 
     @Autowired
     public LiqPayRequest(RestTemplate restTemplate) {
+
         this.restTemplate = restTemplate;
     }
 

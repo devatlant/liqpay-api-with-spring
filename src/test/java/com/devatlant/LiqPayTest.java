@@ -3,12 +3,17 @@ package com.devatlant;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
 import static com.devatlant.LiqPayUtil.base64_encode;
 import static org.junit.Assert.*;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class LiqPayTest {
 
     static final String CNB_FORM_WITHOUT_SANDBOX = "<form method=\"post\" action=\"https://www.liqpay.ua/api/3/checkout\" accept-charset=\"utf-8\">\n" +
@@ -23,10 +28,11 @@ public class LiqPayTest {
             "<input type=\"image\" src=\"//static.liqpay.ua/buttons/p1en.radius.png\" name=\"btn_text\" />\n" +
             "</form>\n";
 
+
     LiqPay lp;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         lp = new LiqPay("publicKey", "privateKey");
     }
 
@@ -124,8 +130,5 @@ public class LiqPayTest {
         assertEquals("DqcGjvo2aXgt0+zBZECdH4cbPWY=", generated.get("signature"));
         assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
     }
-    @Test
-    public void testApi(){
 
-    }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
+
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,14 +34,21 @@ public class LiqPayRequestTest {
     public void testPost() {
         ResponseEntity responseEntity = new ResponseEntity("test", HttpStatus.OK);
         Map<String, String> testMap = new HashMap<>();
-        testMap.put("1","test");
+        testMap.put("1", "test");
         when(restTemplate.postForEntity(anyString(), anyObject(), any(Class.class))).thenReturn(responseEntity);
-        liqPayRequest.post("test.url",testMap);
+        liqPayRequest.post("test.url", testMap);
         verify(restTemplate).postForEntity(anyString(), anyObject(), any(Class.class));
-        //cacheService.put("test1", new Entry("test1"));
-        //Entry expected = new Entry("test1");
-        //Entry actual = cacheService.get("test1");
-        //assertEquals(expected, actual);
+
     }
 
+    @Test(expected = RuntimeException.class)
+    public void shouldPostThrowRuntimeExceptionTest() {
+        ResponseEntity responseEntity = new ResponseEntity("test", HttpStatus.CONFLICT);
+        Map<String, String> testMap = new HashMap<>();
+        testMap.put("2", "test2");
+        when(restTemplate.postForEntity(anyString(), anyObject(), any(Class.class))).thenReturn(responseEntity);
+        liqPayRequest.post("test.url", testMap);
+        verify(restTemplate).postForEntity(anyString(), anyObject(), any(Class.class));
+
+    }
 }
