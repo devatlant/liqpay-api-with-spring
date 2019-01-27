@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,11 +23,6 @@ public class LiqPayRequestTest {
     private RestTemplate restTemplate;
     @InjectMocks
     private LiqPayRequest liqPayRequest;
-
-    @Test
-    public void testGetProxyUser() {
-        // assertEquals("dXNlcjpwYXNz", LiqPayRequest.getProxyUser("user", "pass"));
-    }
 
     @Test
     public void testPost() {

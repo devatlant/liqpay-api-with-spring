@@ -4,13 +4,15 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.*;
+import java.net.Proxy;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.devatlant.LiqPayUtil.base64_encode;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -62,7 +64,7 @@ public class LiqPayTest {
         params.put("currency", "USD");
         params.put("description", "Description");
         params.put("sandbox", "1");
-        if (removedKey!= null) {
+        if (removedKey != null) {
             params.remove(removedKey);
         }
         return Collections.unmodifiableMap(params);
@@ -129,6 +131,11 @@ public class LiqPayTest {
         Map<String, String> generated = lp.generateData(Collections.unmodifiableMap(invoiceParams));
         assertEquals("DqcGjvo2aXgt0+zBZECdH4cbPWY=", generated.get("signature"));
         assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
+    }
+
+    @Test
+    public void constructTest() {
+        LiqPay liqPay = new LiqPay("a", "a", Proxy.NO_PROXY, "a", "a");
     }
 
 }
