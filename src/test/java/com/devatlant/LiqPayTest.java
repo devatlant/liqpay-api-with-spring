@@ -1,5 +1,6 @@
 package com.devatlant;
 
+import com.devatlant.model.LiqPayContract;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 
 import static com.devatlant.LiqPayUtil.base64_encode;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +31,6 @@ public class LiqPayTest {
             "<input type=\"hidden\" name=\"signature\" value=\"jDmdwKnagO2JhE1ONHdk3F7FG0c=\" />\n" +
             "<input type=\"image\" src=\"//static.liqpay.ua/buttons/p1en.radius.png\" name=\"btn_text\" />\n" +
             "</form>\n";
-
 
     LiqPay lp;
 
@@ -134,8 +135,20 @@ public class LiqPayTest {
     }
 
     @Test
+    public void shouldReturnValidContract(){
+        Map<String, String> invoiceParams = new TreeMap<>();
+        invoiceParams.put("email", "client-email@gmail.com");
+        invoiceParams.put("description", "Description");
+        invoiceParams.put("amount", "200");
+        invoiceParams.put("currency", "USD");
+        invoiceParams.put("order_id", "order_id_1");
+        LiqPayContract contract = lp.generateApiContract(invoiceParams);
+        assertNotNull(contract);
+        assertEquals("ogYKx/9/zWJXIxdSWQisBaxLH1w=", contract.signature);
+        assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImRlc2NyaXB0aW9uIjoiRGVzY3JpcHRpb24iLCJlbWFpbCI6ImNsaWVudC1lbWFpbEBnbWFpbC5jb20iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", contract.data);
+    }
+    @Test
     public void constructTest() {
         LiqPay liqPay = new LiqPay("a", "a", Proxy.NO_PROXY, "a", "a");
     }
-
 }
