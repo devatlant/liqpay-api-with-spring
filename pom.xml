@@ -4,7 +4,7 @@
     <artifactId>liqpay-spring</artifactId>
     <packaging>jar</packaging>
     <name>Java LiqPay integration with Spring</name>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -17,6 +17,7 @@
         <url>https://github.com/devatlant/liqpay-api-with-spring</url>
         <tag>HEAD</tag>
     </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.2.9.RELEASE</spring.version>

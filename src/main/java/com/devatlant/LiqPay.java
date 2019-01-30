@@ -141,7 +141,7 @@ public class LiqPay implements LiqPayApi {
     return new LiqPayContract(data, signature);
   }
 
-  private String renderHtmlForm(String data, String language, String signature) {
+    private String renderHtmlForm(String data, String language, String signature) {
         String form = "";
         form += "<form method=\"post\" action=\"" + LIQPAY_API_CHECKOUT_URL + "\" accept-charset=\"utf-8\">\n";
         form += "<input type=\"hidden\" name=\"data\" value=\"" + data + "\" />\n";
@@ -166,7 +166,8 @@ public class LiqPay implements LiqPayApi {
         return base64_encode(sha1(str));
     }
 
-    protected String createSignature(String base64EncodedData) {
+    @Override
+    public String createSignature(String base64EncodedData) {
         return str_to_sign(privateKey + base64EncodedData + privateKey);
     }
 }

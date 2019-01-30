@@ -31,4 +31,5 @@ public interface LiqPayApi {
      * @return data and signature
      */
     LiqPayContract generateApiContract(Map<String, String> params);
+    String createSignature(String dataToSign);
 }
