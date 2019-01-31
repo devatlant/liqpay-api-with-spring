@@ -4,12 +4,20 @@ import com.devatlant.model.LiqPayContract;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.*;
+import java.net.Proxy;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.devatlant.LiqPayUtil.base64_encode;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class LiqPayTest {
 
     static final String CNB_FORM_WITHOUT_SANDBOX = "<form method=\"post\" action=\"https://www.liqpay.ua/api/3/checkout\" accept-charset=\"utf-8\">\n" +
@@ -27,7 +35,7 @@ public class LiqPayTest {
     LiqPay lp;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         lp = new LiqPay("publicKey", "privateKey");
     }
 
@@ -57,7 +65,7 @@ public class LiqPayTest {
         params.put("currency", "USD");
         params.put("description", "Description");
         params.put("sandbox", "1");
-        if (removedKey!= null) {
+        if (removedKey != null) {
             params.remove(removedKey);
         }
         return Collections.unmodifiableMap(params);
@@ -138,5 +146,9 @@ public class LiqPayTest {
         assertNotNull(contract);
         assertEquals("ogYKx/9/zWJXIxdSWQisBaxLH1w=", contract.signature);
         assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImRlc2NyaXB0aW9uIjoiRGVzY3JpcHRpb24iLCJlbWFpbCI6ImNsaWVudC1lbWFpbEBnbWFpbC5jb20iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", contract.data);
+    }
+    @Test
+    public void constructTest() {
+        LiqPay liqPay = new LiqPay("a", "a", Proxy.NO_PROXY, "a", "a");
     }
 }
