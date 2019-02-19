@@ -26,14 +26,14 @@ public class LiqPayRequestMockTest {
     @Before
     public void setUp() {
         liqPayRequest = Mockito.mock(LiqPayRequest.class);
-        liqPay = new LiqPay("public key", "private key");
+        liqPay = new LiqPay("public key", "private key", null);
         MockitoAnnotations.initMocks(liqPay);
     }
 
 
     @Test
     public void testApi() throws Exception {
-        Map<String, String> dataTest = new HashMap<>();
+        Map<String, Object> dataTest = new HashMap<>();
 
         dataTest.put("data", "eyJwdWJsaWNfa2V5IjoicHVibGljIGtleSIsInZlcnNpb24iOiIzIn0=");
         dataTest.put("signature", "P2Ua6fBuyW9duKTPK7+en2AOPmg=");
@@ -41,7 +41,7 @@ public class LiqPayRequestMockTest {
         when(liqPayRequest.post(LiqPay.LIQPAY_API_URL + "test", dataTest)).thenReturn("{\"myvar\":\"test\"}");
         ReflectionTestUtils.setField(liqPay, "liqPayRequest", liqPayRequest);
 
-        liqPay.api("test", new HashMap<String, String>());
+        liqPay.api("test", new HashMap<String, Object>());
         verify(liqPayRequest).post(LiqPay.LIQPAY_API_URL + "test", dataTest);
 
     }

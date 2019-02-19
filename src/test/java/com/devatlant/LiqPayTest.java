@@ -36,30 +36,30 @@ public class LiqPayTest {
 
     @Before
     public void setUp() {
-        lp = new LiqPay("publicKey", "privateKey");
+        lp = new LiqPay("publicKey", "privateKey",null);
     }
 
     @Test
     public void testCnbFormWithoutSandboxParam() throws Exception {
-        Map<String, String> params = defaultTestParams("sandbox");
+        Map<String, Object> params = defaultTestParams("sandbox");
         assertEquals(CNB_FORM_WITHOUT_SANDBOX, lp.cnb_form(params));
     }
 
     @Test
     public void testCnbFormWithSandboxParam() throws Exception {
-        Map<String, String> params = defaultTestParams(null);
+        Map<String, Object> params = defaultTestParams(null);
         assertEquals(CNB_FORM_WITH_SANDBOX, lp.cnb_form(params));
     }
 
     @Test
     public void testCnbFormWillSetSandboxParamIfItEnabledGlobally() throws Exception {
-        Map<String, String> params = defaultTestParams("sandbox");
+        Map<String, Object> params = defaultTestParams("sandbox");
         lp.setCnbSandbox(true);
         assertEquals(CNB_FORM_WITH_SANDBOX, lp.cnb_form(params));
     }
 
-    private Map<String, String> defaultTestParams(String removedKey) {
-        Map<String, String> params = new TreeMap<>();
+    private Map<String, Object> defaultTestParams(String removedKey) {
+        Map<String, Object> params = new TreeMap<>();
         params.put("language", "en");
         params.put("amount", "1.5");
         params.put("currency", "USD");
@@ -73,7 +73,7 @@ public class LiqPayTest {
 
     @Test
     public void testCnbParams() throws Exception {
-        Map<String, String> cnbParams = defaultTestParams(null);
+        Map<String, Object> cnbParams = defaultTestParams(null);
         lp.checkCnbParams(cnbParams);
         assertEquals("en", cnbParams.get("language"));
         assertEquals("USD", cnbParams.get("currency"));
@@ -83,25 +83,25 @@ public class LiqPayTest {
 
     @Test(expected = NullPointerException.class)
     public void testCnbParamsTrowsNpeIfNotAmount() throws Exception {
-        Map<String, String> params = defaultTestParams("amount");
+        Map<String, Object> params = defaultTestParams("amount");
         lp.checkCnbParams(params);
     }
 
     @Test(expected = NullPointerException.class)
     public void testCnbParamsTrowsNpeIfNotCurrency() throws Exception {
-        Map<String, String> params = defaultTestParams("currency");
+        Map<String, Object> params = defaultTestParams("currency");
         lp.checkCnbParams(params);
     }
 
     @Test(expected = NullPointerException.class)
     public void testCnbParamsTrowsNpeIfNotDescription() throws Exception {
-        Map<String, String> params = defaultTestParams("description");
+        Map<String, Object> params = defaultTestParams("description");
         lp.checkCnbParams(params);
     }
 
     @Test
     public void testWithBasicApiParams() throws Exception {
-        Map<String, String> cnbParams = defaultTestParams(null);
+        Map<String, Object> cnbParams = defaultTestParams(null);
         Map fullParams = lp.withBasicApiParams(cnbParams);
         assertEquals("publicKey", fullParams.get("public_key"));
         assertEquals("3", fullParams.get("version"));
@@ -123,29 +123,29 @@ public class LiqPayTest {
 
     @Test
     public void testGenerateData() throws Exception {
-        Map<String, String> invoiceParams = new TreeMap<>();
+        Map<String, Object> invoiceParams = new TreeMap<>();
         invoiceParams.put("email", "client-email@gmail.com");
-        invoiceParams.put("amount", "200");
+        invoiceParams.put("amount", 200.90d);
         invoiceParams.put("currency", "USD");
         invoiceParams.put("order_id", "order_id_1");
         invoiceParams.put("goods", "[{amount: 100, count: 2, unit: 'un.', name: 'phone'}]");
-        Map<String, String> generated = lp.generateData(Collections.unmodifiableMap(invoiceParams));
-        assertEquals("DqcGjvo2aXgt0+zBZECdH4cbPWY=", generated.get("signature"));
-        assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
+        Map<String, Object> generated = lp.generateData(Collections.unmodifiableMap(invoiceParams));
+        assertEquals("rVzczKRc14QGgdyX5v1leTW0UJI=", generated.get("signature"));
+        assertEquals("eyJhbW91bnQiOjIwMC45LCJjdXJyZW5jeSI6IlVTRCIsImVtYWlsIjoiY2xpZW50LWVtYWlsQGdtYWlsLmNvbSIsImdvb2RzIjoiW3thbW91bnQ6IDEwMCwgY291bnQ6IDIsIHVuaXQ6ICd1bi4nLCBuYW1lOiAncGhvbmUnfV0iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", generated.get("data"));
     }
 
     @Test
     public void shouldReturnValidContract(){
-        Map<String, String> invoiceParams = new TreeMap<>();
+        Map<String, Object> invoiceParams = new TreeMap<>();
         invoiceParams.put("email", "client-email@gmail.com");
         invoiceParams.put("description", "Description");
-        invoiceParams.put("amount", "200");
+        invoiceParams.put("amount", 200.90d);
         invoiceParams.put("currency", "USD");
         invoiceParams.put("order_id", "order_id_1");
         LiqPayContract contract = lp.generateApiContract(invoiceParams);
         assertNotNull(contract);
-        assertEquals("ogYKx/9/zWJXIxdSWQisBaxLH1w=", contract.signature);
-        assertEquals("eyJhbW91bnQiOiIyMDAiLCJjdXJyZW5jeSI6IlVTRCIsImRlc2NyaXB0aW9uIjoiRGVzY3JpcHRpb24iLCJlbWFpbCI6ImNsaWVudC1lbWFpbEBnbWFpbC5jb20iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", contract.data);
+        assertEquals("58lU5euKMbTJQ+R6yAtzoW0fmSI=", contract.signature);
+        assertEquals("eyJhbW91bnQiOjIwMC45LCJjdXJyZW5jeSI6IlVTRCIsImRlc2NyaXB0aW9uIjoiRGVzY3JpcHRpb24iLCJlbWFpbCI6ImNsaWVudC1lbWFpbEBnbWFpbC5jb20iLCJvcmRlcl9pZCI6Im9yZGVyX2lkXzEiLCJwdWJsaWNfa2V5IjoicHVibGljS2V5IiwidmVyc2lvbiI6IjMifQ==", contract.data);
     }
     @Test
     public void constructTest() {

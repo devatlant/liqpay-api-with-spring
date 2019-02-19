@@ -10,7 +10,7 @@ public interface LiqPayApi {
     String LIQPAY_API_CHECKOUT_URL = "https://www.liqpay.ua/api/3/checkout";
     String DEFAULT_LANG = "ru";
 
-    Map<String, Object> api(String path, Map<String, String> params) throws Exception;
+    Map<String, Object> api(String path, Map<String, Object> params) throws Exception;
 
     /**
      * Liq and Buy
@@ -23,13 +23,13 @@ public interface LiqPayApi {
      * data - function result base64_encode( $json_string )
      * signature - function result base64_encode( sha1( $private_key . $data . $private_key ) )
      */
-    String cnb_form(Map<String, String> params);
+    String cnb_form(Map<String, Object> params);
 
     /**
      * generate data and signature in specified LiqPay format
      * @param params all payments params to be used
      * @return data and signature
      */
-    LiqPayContract generateApiContract(Map<String, String> params);
+    LiqPayContract generateApiContract(Map<String, Object> params);
     String createSignature(String dataToSign);
 }

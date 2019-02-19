@@ -3,18 +3,15 @@ package com.devatlant;
 import com.devatlant.model.LiqPayContract;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.web.client.RestTemplate;
 import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
 import static com.devatlant.LiqPayUtil.base64_encode;
 import static com.devatlant.LiqPayUtil.sha1;
 
-@Service
+
 public class LiqPay implements LiqPayApi {
     private final JSONParser parser = new JSONParser();
     private final String publicKey;
@@ -25,12 +22,12 @@ public class LiqPay implements LiqPayApi {
     private boolean cnbSandbox;
     private boolean renderPayButton = true;
 
-    @Autowired
     private LiqPayRequest liqPayRequest;
 
-    public LiqPay(String publicKey, String privateKey) {
+    public LiqPay(String publicKey, String privateKey, RestTemplate restTemplate) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
+        liqPayRequest = new LiqPayRequest(restTemplate);
         checkRequired();
     }
 
@@ -93,31 +90,31 @@ public class LiqPay implements LiqPayApi {
     }
 
     @Override
-    public Map<String, Object> api(String path, Map<String, String> params) throws Exception {
-        Map<String, String> data = generateData(params);
+    public Map<String, Object> api(String path, Map<String, Object> params) throws Exception {
+        Map<String, Object> data = generateData(params);
         String resp = liqPayRequest.post(LIQPAY_API_URL + path, data);
         JSONObject jsonObj = (JSONObject) parser.parse(resp);
         return LiqPayUtil.parseJson(jsonObj);
     }
 
-    protected Map<String, String> generateData(Map<String, String> params) {
-        HashMap<String, String> apiData = new HashMap<>();
+    protected Map<String, Object> generateData(Map<String, Object> params) {
+        HashMap<String, Object> apiData = new HashMap<>();
         String data = base64_encode(JSONObject.toJSONString(withBasicApiParams(params)));
         apiData.put("data", data);
         apiData.put("signature", createSignature(data));
         return apiData;
     }
 
-    protected TreeMap<String, String> withBasicApiParams(Map<String, String> params) {
-        TreeMap<String, String> tm = new TreeMap<>(params);
+    protected TreeMap<String, Object> withBasicApiParams(Map<String, Object> params) {
+        TreeMap<String, Object> tm = new TreeMap<>(params);
         tm.put("public_key", publicKey);
         tm.put("version", API_VERSION);
         return tm;
     }
 
-    protected TreeMap<String, String> withSandboxParam(TreeMap<String, String> params) {
+    protected TreeMap<String, Object> withSandboxParam(TreeMap<String, Object> params) {
         if (params.get("sandbox") == null && isCnbSandbox()) {
-            TreeMap<String, String> tm = new TreeMap<>(params);
+            TreeMap<String, Object> tm = new TreeMap<>(params);
             tm.put("sandbox", "1");
             return tm;
         }
@@ -125,16 +122,16 @@ public class LiqPay implements LiqPayApi {
     }
 
     @Override
-    public String cnb_form(Map<String, String> params) {
+    public String cnb_form(Map<String, Object> params) {
         checkCnbParams(params);
         String data = base64_encode(JSONObject.toJSONString(withSandboxParam(withBasicApiParams(params))));
         String signature = createSignature(data);
-        String language = params.get("language") != null ? params.get("language") : DEFAULT_LANG;
+        String language = params.get("language") != null ? (String) params.get("language") : DEFAULT_LANG;
         return renderHtmlForm(data, language, signature);
     }
 
   @Override
-  public LiqPayContract generateApiContract(Map<String, String> params) {
+  public LiqPayContract generateApiContract(Map<String, Object> params) {
     checkCnbParams(params);
     final String data = base64_encode(JSONObject.toJSONString(withSandboxParam(withBasicApiParams(params))));
     final String signature = createSignature(data);
@@ -153,7 +150,7 @@ public class LiqPay implements LiqPayApi {
         return form;
     }
 
-    protected void checkCnbParams(Map<String, String> params) {
+    protected void checkCnbParams(Map<String, Object> params) {
         if (params.get("amount") == null)
             throw new NullPointerException("amount can't be null");
         if (params.get("currency") == null)

@@ -27,7 +27,7 @@ public class LiqPayRequestTest {
     @Test
     public void testPost() {
         ResponseEntity responseEntity = new ResponseEntity("test", HttpStatus.OK);
-        Map<String, String> testMap = new HashMap<>();
+        Map<String, Object> testMap = new HashMap<>();
         testMap.put("1", "test");
         when(restTemplate.postForEntity(anyString(), anyObject(), any(Class.class))).thenReturn(responseEntity);
         liqPayRequest.post("test.url", testMap);
@@ -38,7 +38,7 @@ public class LiqPayRequestTest {
     @Test(expected = RuntimeException.class)
     public void shouldPostThrowRuntimeExceptionTest() {
         ResponseEntity responseEntity = new ResponseEntity("test", HttpStatus.CONFLICT);
-        Map<String, String> testMap = new HashMap<>();
+        Map<String, Object> testMap = new HashMap<>();
         testMap.put("2", "test2");
         when(restTemplate.postForEntity(anyString(), anyObject(), any(Class.class))).thenReturn(responseEntity);
         liqPayRequest.post("test.url", testMap);
